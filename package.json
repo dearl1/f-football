@@ -1,16 +1,23 @@
 {
-  "name": "myexpressapp",
-  "version": "0.0.0",
-  "private": true,
+  "name": "fantasy-football-deploy",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node app.js"
   },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "axios": "^1.7.7",
     "ejs": "^3.1.10",
-    "express": "^4.21.1",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "express": "^4.21.1"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "delay": 2500,
+    "env": {
+      "PORT": 4000
+    }
   }
 }
