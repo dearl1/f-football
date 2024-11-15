@@ -117,9 +117,18 @@
 	<div class="inner-content col-md-12">
 	<div class="container jumboContainer">
 	<div class=" col-md-8 middle">
-	   <h1>THE FUTURE really<br> <span>WAS FIVE MINUTES AGO</span>.</h1>
+	   <h1>TODAY<br> <span>IS DAVID EARL'S BIRTHDAY</span>.</h1>
 
-	   <p>We were there and it is going to be epic</p></div>
+	   <p>We were there and it is going to be epic</p>
+    
+
+  <div class="search-container">
+    <input type="text" id="searchBar" style="color: black" placeholder="Search..." oninput="filterList()">
+</div>
+<ul id="itemList" class="item-list"></ul>
+
+     
+    </div>
 
 	   <div class="content-right col-md-4">
 	   <h3>FUTURE</h3><span>CONFERENCE</span>
@@ -221,6 +230,34 @@ there in the future</p>
 
 </div><!---------- End of Wrapper ----------->
 
+
+<script>
+  // List of fruits
+  const fruits = ["Apple", "Banana", "Orange", "Grapes", "Mango", "Peach", "Strawberry", "another fruit"];
+
+  // Function to display the list of fruits
+  function displayList(items) {
+      const itemList = document.getElementById('itemList');
+      itemList.innerHTML = ""; // Clear the existing list
+      items.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          itemList.appendChild(li);
+      });
+  }
+
+  // Function to filter the list based on the search input
+  function filterList() {
+      const searchValue = document.getElementById('searchBar').value.toLowerCase();
+      const filteredItems = fruits.filter(fruit => 
+          fruit.toLowerCase().includes(searchValue)
+      );
+      displayList(filteredItems);
+  }
+
+  // Initial display of the full list
+  displayList(fruits);
+</script>
 
 
   <script src="js/jquery.min.js"></script>
