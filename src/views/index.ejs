@@ -122,10 +122,14 @@
 	   <p>We were there and it is going to be epic</p>
     
 
-  <div class="search-container">
-    <input type="text" id="searchBar" style="color: black" placeholder="Search..." oninput="filterList()">
-</div>
-<ul id="itemList" class="item-list"></ul>
+     <div class="container">
+      <input type="text" id="searchBar" style="color: black" placeholder="Search..." oninput="filterList()">
+  </div>
+  <ul id="filteredList" class="item-list"></ul>
+  <div class="added-list">
+      <h3>Added Items</h3>
+      <ul id="addedItemsList" class="item-list"></ul>
+  </div>
 
      
     </div>
@@ -233,16 +237,36 @@ there in the future</p>
 
 <script>
   // List of fruits
-  const fruits = ["Apple", "Banana", "Orange", "Grapes", "Mango", "Peach", "Strawberry", "another fruit"];
+  const fruits = ["Apple", "Banana", "Orange", "Grapes", "Mango", "Peach", "Strawberry"];
 
-  // Function to display the list of fruits
-  function displayList(items) {
-      const itemList = document.getElementById('itemList');
-      itemList.innerHTML = ""; // Clear the existing list
+  // List of added items
+  const addedItems = [];
+
+  // Function to display the list of filtered items
+  function displayFilteredList(items) {
+      const filteredList = document.getElementById('filteredList');
+      filteredList.innerHTML = ""; // Clear the existing list
       items.forEach(item => {
           const li = document.createElement('li');
           li.textContent = item;
-          itemList.appendChild(li);
+
+          const addButton = document.createElement('button');
+          addButton.textContent = "Add";
+          addButton.onclick = () => addItem(item);
+
+          li.appendChild(addButton);
+          filteredList.appendChild(li);
+      });
+  }
+
+  // Function to display the added items list
+  function displayAddedItemsList() {
+      const addedItemsList = document.getElementById('addedItemsList');
+      addedItemsList.innerHTML = ""; // Clear the existing list
+      addedItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          addedItemsList.appendChild(li);
       });
   }
 
@@ -252,11 +276,19 @@ there in the future</p>
       const filteredItems = fruits.filter(fruit => 
           fruit.toLowerCase().includes(searchValue)
       );
-      displayList(filteredItems);
+      displayFilteredList(filteredItems);
+  }
+
+  // Function to add an item to the added items list
+  function addItem(item) {
+      if (!addedItems.includes(item)) {
+          addedItems.push(item);
+          displayAddedItemsList();
+      }
   }
 
   // Initial display of the full list
-  displayList(fruits);
+  displayFilteredList(fruits);
 </script>
 
 
