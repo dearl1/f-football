@@ -154,7 +154,14 @@
 	   <p>v0.1</p>
 
        <%
-       console.log(data)
+       hi = 1;
+
+       function counting(listIn) {
+        for (let i = 0; i < listIn.length; i++) {
+            console.log(listIn[i]);
+        }
+        }
+       
        %>
     
 
@@ -166,6 +173,12 @@
       <h3>Added Items</h3>
       <ul id="addedItemsList" class="item-list"></ul>
   </div>
+
+  <%
+  console.log("data from above is: "+hi);
+  console.log("will output from an array...");
+  counting([1,2,3,4,3,2,1]);
+  %>
 
      
     </div>
@@ -620,6 +633,7 @@ jQuery(document).ready(function(){
 
 
 });
+
 
 </script>
 
