@@ -4,6 +4,7 @@ const path = require('path');
 const PORT = process.env.PORT || 3000
 const app = express();
 const sessionsRouter = require('./src/routers/sessionsRouter')
+const playerService = require('./src/services/playerService');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', './src/views');
@@ -21,7 +22,16 @@ sessions = [
 app.use('/sessions', sessionsRouter);
 
 app.get('/',(req, res)=>{
-    res.render('index', {title: 'Globomantics', data: ['a', 'b', 'c']});
+
+    let jsonData = null;
+    (async () => {
+        jsonData = await playerService.getPlayers();
+        // console.log(jsonData);
+        // res.send(jsonData.data);
+        res.render('index', {title: 'Globomantics', data: jsonData.data});
+    })();
+    
+    
 })
 
 app.listen(PORT), ()=>{
