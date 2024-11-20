@@ -295,6 +295,8 @@ app.get('/',(req, res)=>{
     //     res.render('index', {title: 'Globomantics', data: jsonData.data});
     // })();
 
+    console.log("from app.js");
+
 
     res.render('index', {title: 'Globomantics', data: playerData});
 })
