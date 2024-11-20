@@ -16,15 +16,18 @@
   body {
       font-family: Arial, sans-serif;
       padding: 20px;
+      margin: 0;
   }
   .container {
       margin-bottom: 20px;
+  }
+  .filteredList {
+    max-height: 150px; /* 5 items at ~30px each */
   }
   .item-list {
       list-style-type: none;
       padding: 0;
       margin: 0;
-      max-height: 150px; /* 5 items at ~30px each */
       overflow-y: auto;
       border: 1px solid #ddd;
       border-radius: 4px;
@@ -42,6 +45,16 @@
   .added-list {
       margin-top: 20px;
   }
+.image-section {
+    position: relative;
+    background-image: url('images/hero image.png'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Fixes the background while text scrolls */
+    padding: 20px;
+    min-height: 100vh;
+    color: #eee;
+}
 </style>
 </head>
 
@@ -144,10 +157,16 @@
   	</header>
 
 
-<section class="banner">
-    <img src="images/hero image.png"/>
-	<div class="inner-content col-md-12">
+
+
+</div><!---------- End of Wrapper ----------->
+
+
+<!-- <section class="banner"> -->
+  <div class="image-section">
+	<!-- <div class="inner-content col-md-12"> -->
 	<div class="container jumboContainer">
+    <!-- <div class="inner-content col-md-12"> -->
 	<div class=" col-md-8 middle">
 	   <h1>FANTASY FOOTBALL<br> <span>POINTS FOR EACH PLAYER</span>.</h1>
 
@@ -157,30 +176,18 @@
      <div class="container">
       <input type="text" id="searchBar" style="color: black" placeholder="Search..." oninput="filterList()">
   </div>
-  <ul id="filteredList" class="item-list"></ul>
+  <ul id="filteredList" class="item-list filteredList"></ul>
   <div class="added-list">
       <h3>Added Items</h3>
-      <ul id="addedItemsList" class="item-list-added"></ul>
+      <ul id="addedItemsList" class="item-list"></ul>
   </div>
 
      
-    </div>
-
-	   <div class="content-right col-md-4">
-	   <h3>FUTURE</h3><span>CONFERENCE</span>
-	   <div class="text-center">
-<button type="button" class="btn btn-primary btn-lg">SIGN UP TODAY</button></div>
-<p>Tickets are selling fast
-get yours today and be
-there in the future</p>
-	   </div>
+    <!-- </div> -->
 	</div>
 	   </div>
-</section>
-
-
-
-</div><!---------- End of Wrapper ----------->
+    </div>
+<!-- </section> -->
 
 
 <script>
