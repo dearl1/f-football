@@ -55,6 +55,18 @@ let jsonData = null;
     //     }
     // }
     // console.log("end: find non-english characters \n")
+
+
+    // console.log("\nstart: check if duplicate id");
+    // const mySet = new Set();
+    // for (const item of playerData) {
+    //     if (mySet.has(item.id) ) {
+    //         console.log(`processing ${item.first_name} ${item.last_name} has duplicate id`);
+    //     }
+    //     mySet.add(item.id);
+    // }
+    // console.log(`mySet.size: ${mySet.size}`);
+    // console.log("end: check if duplicate id \n");
     
 })();
 
