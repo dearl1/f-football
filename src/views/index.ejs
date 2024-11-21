@@ -192,6 +192,50 @@
 
 <script>
 
+  // // set up IndexedDB
+
+  let db = null;
+  function create_database() {
+    const request = indexedDB.open('MyTestDB');
+
+    request.onerror = function (event) {
+        console.log("Problem opening DB.");
+    }
+
+    request.onupgradeneeded = function (event) {
+        db = event.target.result;
+
+        if (!db.objectStoreNames.contains("managers")) {
+            db.createObjectStore("managers", { keyPath: "id" });
+            console.log("created managers objectStore")
+        }
+
+    }
+
+    request.onsuccess = function (event) {
+        console.log("DB OPENED.");
+
+    }
+}
+
+function delete_database() {
+    const request = indexedDB.deleteDatabase('MyTestDB');
+
+    request.onerror = function (event) {
+        console.log("Problem deleting DB.");
+    }
+
+    request.onsuccess = function (event) {
+        db = event.target.result;
+        console.log("DB DELETED.");
+    }
+}
+
+create_database();
+
+// // end: set up IndexedDB
+
+
   // List of added items
   const addedItems = [];
 
@@ -219,29 +263,33 @@
       addedItemsList.innerHTML = ""; // Clear the existing list
       addedItems.forEach(itemId => {
 
-      (async () => {
-        temp = await fetch('/filter-id', {
+      // (async () => {
+        // temp = await fetch('/filter-id', {
+        temp = fetch('/filter-id', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
             },
             body: JSON.stringify({data: itemId})
         })
+        .then(_ => _.json())
+        .then(thing => {
 
-        thing = await temp.json();
-        item = thing.data[0];
+          item = thing.data[0];
 
-        const li = document.createElement('li');
-        li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
+          const li = document.createElement('li');
+          li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
 
-        const removeButton = document.createElement('button');
-        removeButton.textContent = "Remove";
-        removeButton.onclick = () => removeItem(item.id);
+          const removeButton = document.createElement('button');
+          removeButton.textContent = "Remove";
+          removeButton.onclick = () => removeItem(item.id);
 
-        li.appendChild(removeButton);
-        addedItemsList.appendChild(li);
-              
-      })();
+          li.appendChild(removeButton);
+          addedItemsList.appendChild(li);
+
+        })
+
+      // })();
         
 
       });
