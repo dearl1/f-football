@@ -191,17 +191,12 @@
 
 
 <script>
-  // List of fruits
-  // const fruits = ["Apple", "Banana", "Orange", "Grapes", "Mango", "Peach", "Strawberry", "Jørgensen"];
 
   // List of added items
   const addedItems = [];
 
   // Function to display the list of filtered items
   function displayFilteredList(items) {
-
-    // console.log(items);
-    // console.log(items.data[0]);
 
     const filteredList = document.getElementById('filteredList');
     filteredList.innerHTML = ""; // Clear the existing list
@@ -211,7 +206,7 @@
 
         const addButton = document.createElement('button');
         addButton.textContent = "Add";
-        addButton.onclick = () => addItem(item);
+        addButton.onclick = () => addItem(item.id);
 
         li.appendChild(addButton);
         filteredList.appendChild(li);
@@ -222,16 +217,33 @@
   function displayAddedItemsList() {
       const addedItemsList = document.getElementById('addedItemsList');
       addedItemsList.innerHTML = ""; // Clear the existing list
-      addedItems.forEach(item => {
-          const li = document.createElement('li');
-          li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
+      addedItems.forEach(itemId => {
 
-          const removeButton = document.createElement('button');
-          removeButton.textContent = "Remove";
-          removeButton.onclick = () => removeItem(item);
+      (async () => {
+        temp = await fetch('/filter-id', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({data: itemId})
+        })
 
-          li.appendChild(removeButton);
-          addedItemsList.appendChild(li);
+        thing = await temp.json();
+        item = thing.data[0];
+
+        const li = document.createElement('li');
+        li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = "Remove";
+        removeButton.onclick = () => removeItem(item.id);
+
+        li.appendChild(removeButton);
+        addedItemsList.appendChild(li);
+              
+      })();
+        
+
       });
   }
 
@@ -264,18 +276,18 @@
   }
 
   // Function to add an item to the added items list
-  function addItem(item) {
-      if (!addedItems.includes(item)) {
-          addedItems.push(item);
+  function addItem(itemId) {
+      if (!addedItems.includes(itemId)) {
+          addedItems.push(itemId);
           displayAddedItemsList();
       }
   }
 
   // Function to remove an item from the added items list
-  function removeItem(item) {
-      const index = addedItems.indexOf(item);
+  function removeItem(itemId) {
+      const index = addedItems.indexOf(itemId);
       if (index > -1) {
-          addedItems.splice(index, 1); // Remove the item
+          addedItems.splice(index, 1); // Remove the itemId
           displayAddedItemsList();
       }
   }

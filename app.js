@@ -106,9 +106,18 @@ app.post('/filter', (req,res) => {
 
     }
 
-    // console.log("something: " + req.body);
-    
-    
+})
+
+app.post('/filter-id', (req,res) => {
+    searchValue = req.body.data;
+
+    const filteredItems = playerData.filter(player => 
+        player.id == searchValue
+    );
+
+    res.json({data: filteredItems})
+
+
 })
 
 app.listen(PORT), ()=>{
