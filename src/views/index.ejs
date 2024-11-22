@@ -45,6 +45,18 @@
   .added-list {
       margin-top: 20px;
   }
+  .name-container {
+    flex: 2; /* Take up more space for the name column */
+    text-align: left;
+}
+.add-remove-button {
+    flex: 1; /* Button takes up minimal space */
+    margin-left: 10px;
+}
+.points-container {
+    flex: 1; /* Less space for the points column */
+    text-align: right; /* Align points to the right */
+}
 .image-section {
     position: relative;
     background-image: url('images/hero image.png'); /* Replace with your image URL */
@@ -377,13 +389,41 @@ function update_record(record) {
     const filteredList = document.getElementById('filteredList');
     filteredList.innerHTML = ""; // Clear the existing list
     items.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
+        // const li = document.createElement('li');
+        // li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
 
+        // const addButton = document.createElement('button');
+        // addButton.textContent = "Add";
+        // addButton.onclick = () => addItem(item.id);
+
+        // li.appendChild(addButton);
+        // filteredList.appendChild(li);
+
+
+
+
+        // start of better way
+        const li = document.createElement('li');
+
+        // Create a container for the name
+        const nameContainer = document.createElement('div');
+        nameContainer.textContent = `${item.first_name} ${item.last_name}, ${item.squad_id}`;
+        nameContainer.className = "name-container";
+
+        // Create a container for the total points
+        const pointsContainer = document.createElement('div');
+        pointsContainer.textContent = `${item.stats.total_points} points`;
+        pointsContainer.className = "points-container";
+
+        // Create the remove button
         const addButton = document.createElement('button');
         addButton.textContent = "Add";
+        addButton.className = "add-remove-button";
         addButton.onclick = () => addItem(item.id);
 
+        // Append the elements
+        li.appendChild(nameContainer);
+        li.appendChild(pointsContainer);
         li.appendChild(addButton);
         filteredList.appendChild(li);
     });
@@ -409,15 +449,27 @@ function update_record(record) {
         .then(thing => {
 
           let item = thing.data[0];
-          // console.log(`\n func displayAddedItemsList>deeper. item.id = ${item.id}`);
-
           const li = document.createElement('li');
-          li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
 
+          // Create a container for the name
+          const nameContainer = document.createElement('div');
+          nameContainer.textContent = `${item.first_name} ${item.last_name}, ${item.squad_id}`;
+          nameContainer.className = "name-container";
+
+          // Create a container for the total points
+          const pointsContainer = document.createElement('div');
+          pointsContainer.textContent = `${item.stats.total_points} points`;
+          pointsContainer.className = "points-container";
+
+          // Create the remove button
           const removeButton = document.createElement('button');
           removeButton.textContent = "Remove";
+          removeButton.className = "add-remove-button";
           removeButton.onclick = () => removeItem(item.id);
 
+          // Append the elements
+          li.appendChild(nameContainer);
+          li.appendChild(pointsContainer);
           li.appendChild(removeButton);
           addedItemsList.appendChild(li);
 
