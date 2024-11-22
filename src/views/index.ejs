@@ -194,28 +194,60 @@
 
   // // set up IndexedDB
 
+  manager_data = [
+    {
+    "manager_key": 0,
+    "player_indices": [
+    202641,
+    97032,
+    491279
+    ]
+    },
+    {
+    "manager_key": 1,
+    "player_indices": [
+    232917,
+    477424,
+    78916
+    ]
+    }
+  ]
+
   let db = null;
-  function create_database() {
-    const request = indexedDB.open('MyTestDB');
+  dbNeedsCreating = false;
 
-    request.onerror = function (event) {
-        console.log("Problem opening DB.");
-    }
+  function open_or_create_database() {
 
-    request.onupgradeneeded = function (event) {
-        db = event.target.result;
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('MyTestDB');
 
-        if (!db.objectStoreNames.contains("managers")) {
-            db.createObjectStore("managers", { keyPath: "id" });
-            console.log("created managers objectStore")
-        }
+      request.onerror = function (event) {
+          console.log("Problem opening DB.");
+      }
 
-    }
+      request.onupgradeneeded = function (event) {
+          db = event.target.result;
 
-    request.onsuccess = function (event) {
-        console.log("DB OPENED.");
+          if (!db.objectStoreNames.contains("managers")) {
 
-    }
+            dbNeedsCreating = true;
+            
+            db.createObjectStore("managers", { keyPath: "manager_key" });
+            console.log("created managers objectStore")        
+            console.log(`open_or_create_database. dbNeedsCreating = ${dbNeedsCreating}`);
+
+          }
+
+      }
+
+      request.onsuccess = function (event) {
+          console.log("DB OPENED.");
+          resolve(true);
+
+      }      
+    })
+    
+
 }
 
 function delete_database() {
@@ -231,7 +263,48 @@ function delete_database() {
     }
 }
 
-create_database();
+function insert_records(records) {
+    if (db) {
+        const insert_transaction = db.transaction("managers", "readwrite");
+        const objectStore = insert_transaction.objectStore("managers");
+
+        return new Promise((resolve, reject) => {
+            insert_transaction.oncomplete = function () {
+                console.log("ALL INSERT TRANSACTIONS COMPLETE.");
+                resolve(true);
+            }
+
+            insert_transaction.onerror = function () {
+                console.log("PROBLEM INSERTING RECORDS.")
+                resolve(false);
+            }
+
+            records.forEach(item => {
+                let request = objectStore.add(item);
+
+                request.onsuccess = function () {
+                    console.log("Added: ", item);
+                }
+            });
+        });
+    }
+    else {
+        console.log("no db")
+    }
+}
+
+
+(async () => {
+  // delete_database();
+  await open_or_create_database();
+  console.log(`top level. dbNeedsCreating = ${dbNeedsCreating}`);
+  if (dbNeedsCreating) {
+    insert_records(manager_data);
+  }
+})();
+
+
+
 
 // // end: set up IndexedDB
 
