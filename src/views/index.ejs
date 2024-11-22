@@ -393,6 +393,7 @@ function update_record(record) {
   function displayAddedItemsList() {
       const addedItemsList = document.getElementById('addedItemsList');
       addedItemsList.innerHTML = ""; // Clear the existing list
+      console.log(`\n func displayAddedItemsList. addedItems = ${addedItems}`);
       addedItems.forEach(itemId => {
 
       // (async () => {
@@ -407,7 +408,8 @@ function update_record(record) {
         .then(_ => _.json())
         .then(thing => {
 
-          item = thing.data[0];
+          let item = thing.data[0];
+          // console.log(`\n func displayAddedItemsList>deeper. item.id = ${item.id}`);
 
           const li = document.createElement('li');
           li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
@@ -468,6 +470,7 @@ function update_record(record) {
               "player_indices": addedItems
               }
             )
+            console.log(`\n tried updating these items to db: ${addedItems}`);
           })();
           
       }
@@ -475,21 +478,23 @@ function update_record(record) {
 
   // Function to remove an item from the added items list
   function removeItem(itemId) {
-      const index = addedItems.indexOf(itemId);
-      if (index > -1) {
-          addedItems.splice(index, 1); // Remove the itemId
-          displayAddedItemsList();
+    console.log(`\n in removeItem. itemId = ${itemId}`);
+    const index = addedItems.indexOf(itemId);
+    if (index > -1) {
+        addedItems.splice(index, 1); // Remove the itemId
+        displayAddedItemsList();
 
-          (async () => {
-            await update_record(
-              {
-              "manager_key": 0,
-              "player_indices": addedItems
-              }
-            )
-          })();
-          
-      }
+        (async () => {
+          await update_record(
+            {
+            "manager_key": 0,
+            "player_indices": addedItems
+            }
+          )
+          console.log(`\n tried updating these items to db: ${addedItems}`);
+        })();
+        
+    }
   }
 
   // Initial display of the full list
