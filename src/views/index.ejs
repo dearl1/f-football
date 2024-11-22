@@ -192,7 +192,7 @@
 
 <script>
 
-  // // set up IndexedDB
+  // // start: IndexedDB functions
 
   manager_data = [
     {
@@ -241,8 +241,9 @@
       }
 
       request.onsuccess = function (event) {
-          console.log("DB OPENED.");
-          resolve(true);
+        db = event.target.result;
+        console.log("DB OPENED.");
+        resolve(true);
 
       }      
     })
@@ -293,24 +294,82 @@ function insert_records(records) {
     }
 }
 
+function get_record(searchFor) {
+    if (db) {
+        const get_transaction = db.transaction("managers", "readonly");
+        const objectStore = get_transaction.objectStore("managers");
+
+        return new Promise((resolve, reject) => {
+            get_transaction.oncomplete = function () {
+            console.log("ALL GET TRANSACTIONS COMPLETE.");
+            }
+
+            get_transaction.onerror = function () {
+            console.log("PROBLEM GETTING RECORDS.")
+            }
+
+            let request = objectStore.get(searchFor);
+
+            request.onsuccess = function (event) {
+            resolve(event.target.result);
+            }
+        });
+    }
+    else {
+        console.log("no db")
+    }
+}
+
+function update_record(record) {
+    if (db) {
+        const put_transaction = db.transaction("managers", "readwrite");
+        const objectStore = put_transaction.objectStore("managers");
+
+        return new Promise((resolve, reject) => {
+            put_transaction.oncomplete = function () {
+                console.log("ALL PUT TRANSACTIONS COMPLETE.");
+                resolve(true);
+            }
+
+            put_transaction.onerror = function () {
+                console.log("PROBLEM UPDATING RECORDS.")
+                resolve(false);
+            }
+
+            objectStore.put(record);
+        });
+    }
+}
+
+
+// // end: IndexedDB functions
 
 (async () => {
+  setUpComplete = false;
+
   // delete_database();
   await open_or_create_database();
   console.log(`top level. dbNeedsCreating = ${dbNeedsCreating}`);
   if (dbNeedsCreating) {
-    insert_records(manager_data);
+    await insert_records(manager_data);
   }
+
+  // res = await get_record(0);
+  // console.log(`res = ${res}`)
+  // console.log(`res.player_indices = ${res.player_indices}`)
+
+  // List of added items
+  res = await get_record(0);
+  addedItems = res.player_indices;
+  displayAddedItemsList();
+
+
 })();
 
 
 
 
-// // end: set up IndexedDB
-
-
-  // List of added items
-  const addedItems = [];
+  
 
   // Function to display the list of filtered items
   function displayFilteredList(items) {
@@ -401,6 +460,16 @@ function insert_records(records) {
       if (!addedItems.includes(itemId)) {
           addedItems.push(itemId);
           displayAddedItemsList();
+
+          (async () => {
+            await update_record(
+              {
+              "manager_key": 0,
+              "player_indices": addedItems
+              }
+            )
+          })();
+          
       }
   }
 
@@ -410,6 +479,16 @@ function insert_records(records) {
       if (index > -1) {
           addedItems.splice(index, 1); // Remove the itemId
           displayAddedItemsList();
+
+          (async () => {
+            await update_record(
+              {
+              "manager_key": 0,
+              "player_indices": addedItems
+              }
+            )
+          })();
+          
       }
   }
 
@@ -462,6 +541,8 @@ jQuery(document).ready(function(){
 
 });
 
+// (async () => {
+// })();
 
 </script>
 
