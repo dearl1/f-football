@@ -210,7 +210,7 @@ input[type="text"] {
       <div class="left-section">
         <div class="added-list">
           <h3>Added Items</h3>
-          <ul id="addedItemsList" class="item-list"></ul>
+          <ul id="addedItemsList-Emma" class="item-list"></ul>
         </div>
       </div>
     
@@ -220,6 +220,7 @@ input[type="text"] {
         </div>
         <ul id="filteredList" class="item-list filteredList"></ul>
       </div>
+
     </div>     
   <!-- </div> -->
   </div>
@@ -229,24 +230,42 @@ input[type="text"] {
 
   // // start: IndexedDB functions
 
-  manager_data = [
-    {
-    "manager_key": 0,
-    "player_indices": [
-    202641,
-    97032,
-    491279
-    ]
-    },
-    {
-    "manager_key": 1,
-    "player_indices": [
-    232917,
-    477424,
-    78916
-    ]
+  // manager_data = [
+  //   {
+  //   "manager_key": 0,
+  //   "player_indices": [
+  //   202641,
+  //   97032,
+  //   491279
+  //   ]
+  //   },
+  //   {
+  //   "manager_key": 1,
+  //   "player_indices": [
+  //   232917,
+  //   477424,
+  //   78916
+  //   ]
+  //   }
+  // ]
+
+manager_data = [
+  {
+    "single_id": 0,
+    "data": {
+      "Emma": [
+      232917,
+      477424,
+      78916
+      ],
+      "David": [
+      202641,
+      97032,
+      491279
+      ]
     }
-  ]
+  }
+]
 
   let db = null;
   dbNeedsCreating = false;
@@ -267,7 +286,7 @@ input[type="text"] {
 
             dbNeedsCreating = true;
             
-            db.createObjectStore("managers", { keyPath: "manager_key" });
+            db.createObjectStore("managers", { keyPath: "single_id" });
             console.log("created managers objectStore")        
             console.log(`open_or_create_database. dbNeedsCreating = ${dbNeedsCreating}`);
 
@@ -287,6 +306,8 @@ input[type="text"] {
 }
 
 function delete_database() {
+  return new Promise((resolve, reject) => {
+
     const request = indexedDB.deleteDatabase('MyTestDB');
 
     request.onerror = function (event) {
@@ -296,7 +317,10 @@ function delete_database() {
     request.onsuccess = function (event) {
         db = event.target.result;
         console.log("DB DELETED.");
+        resolve(true);
     }
+
+  })
 }
 
 function insert_records(records) {
@@ -380,9 +404,7 @@ function update_record(record) {
 // // end: IndexedDB functions
 
 (async () => {
-  setUpComplete = false;
-
-  // delete_database();
+  await delete_database();
   await open_or_create_database();
   console.log(`top level. dbNeedsCreating = ${dbNeedsCreating}`);
   if (dbNeedsCreating) {
@@ -395,8 +417,13 @@ function update_record(record) {
 
   // List of added items
   res = await get_record(0);
-  addedItems = res.player_indices;
-  displayAddedItemsList();
+  addedItems = res.data;
+
+  displayAddedItemsList("Emma");    
+  // for (const manager in addedItems) {
+  //   displayAddedItemsList(manager);    
+  // }
+
 
 
 })();
@@ -453,11 +480,12 @@ function update_record(record) {
   }
 
   // Function to display the added items list
-  function displayAddedItemsList() {
-      const addedItemsList = document.getElementById('addedItemsList');
+  function displayAddedItemsList(manager) {
+      const addedItemsList = document.getElementById(`addedItemsList-${manager}`);
       addedItemsList.innerHTML = ""; // Clear the existing list
       console.log(`\n func displayAddedItemsList. addedItems = ${addedItems}`);
-      addedItems.forEach(itemId => {
+      manager_addedItems = addedItems[manager];
+      manager_addedItems.forEach(itemId => {
 
       // (async () => {
         // temp = await fetch('/filter-id', {
@@ -541,8 +569,8 @@ function update_record(record) {
           (async () => {
             await update_record(
               {
-              "manager_key": 0,
-              "player_indices": addedItems
+              "single_id": 0,
+              "data": addedItems
               }
             )
             console.log(`\n tried updating these items to db: ${addedItems}`);
@@ -562,8 +590,8 @@ function update_record(record) {
         (async () => {
           await update_record(
             {
-            "manager_key": 0,
-            "player_indices": addedItems
+            "single_id": 0,
+            "data": addedItems
             }
           )
           console.log(`\n tried updating these items to db: ${addedItems}`);
