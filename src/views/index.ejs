@@ -216,9 +216,9 @@ input[type="text"] {
     
       <div class="right-section">
         <div class="container">
-          <input type="text" id="searchBar" style="color: black" placeholder="Search..." oninput="filterList()">
+          <input type="text" id="searchBar-Emma" style="color: black" placeholder="Search..." oninput="filterList('Emma')">
         </div>
-        <ul id="filteredList" class="item-list filteredList"></ul>
+        <ul id="filteredList-Emma" class="item-list filteredList"></ul>
       </div>
 
     </div>     
@@ -404,7 +404,7 @@ function update_record(record) {
 // // end: IndexedDB functions
 
 (async () => {
-  await delete_database();
+  // await delete_database();
   await open_or_create_database();
   console.log(`top level. dbNeedsCreating = ${dbNeedsCreating}`);
   if (dbNeedsCreating) {
@@ -434,9 +434,9 @@ function update_record(record) {
   
 
   // Function to display the list of filtered items
-  function displayFilteredList(items) {
+  function displayFilteredList(manager, items) {
 
-    const filteredList = document.getElementById('filteredList');
+    const filteredList = document.getElementById(`filteredList-${manager}`);
     filteredList.innerHTML = ""; // Clear the existing list
     items.forEach(item => {
         // const li = document.createElement('li');
@@ -469,7 +469,7 @@ function update_record(record) {
         const addButton = document.createElement('button');
         addButton.textContent = "Add";
         addButton.className = "add-remove-button";
-        addButton.onclick = () => addItem(item.id);
+        addButton.onclick = () => addItem(manager, item.id);
 
         // Append the elements
         li.appendChild(nameContainer);
@@ -516,7 +516,7 @@ function update_record(record) {
           const removeButton = document.createElement('button');
           removeButton.textContent = "Remove";
           removeButton.className = "add-remove-button";
-          removeButton.onclick = () => removeItem(item.id);
+          removeButton.onclick = () => removeItem(manager, item.id);
 
           // Append the elements
           li.appendChild(nameContainer);
@@ -540,8 +540,8 @@ function update_record(record) {
 //       );
 //       displayFilteredList(filteredItems);
 //   }
-  function filterList() {
-      const searchValue = document.getElementById('searchBar').value.toLowerCase();
+  function filterList(manager) {
+      const searchValue = document.getElementById(`searchBar-${manager}`).value.toLowerCase();
 
       (async () => {
         temp = await fetch('/filter', {
@@ -554,17 +554,17 @@ function update_record(record) {
 
         thing = await temp.json();
 
-        displayFilteredList(thing.data);
+        displayFilteredList(manager, thing.data);
         
     })();
       
   }
 
   // Function to add an item to the added items list
-  function addItem(itemId) {
-      if (!addedItems.includes(itemId)) {
-          addedItems.push(itemId);
-          displayAddedItemsList();
+  function addItem(manager, itemId) {
+      if (!addedItems[manager].includes(itemId)) {
+          addedItems[manager].push(itemId);
+          displayAddedItemsList(manager);
 
           (async () => {
             await update_record(
@@ -580,12 +580,12 @@ function update_record(record) {
   }
 
   // Function to remove an item from the added items list
-  function removeItem(itemId) {
+  function removeItem(manager, itemId) {
     console.log(`\n in removeItem. itemId = ${itemId}`);
-    const index = addedItems.indexOf(itemId);
+    const index = addedItems[manager].indexOf(itemId);
     if (index > -1) {
-        addedItems.splice(index, 1); // Remove the itemId
-        displayAddedItemsList();
+        addedItems[manager].splice(index, 1); // Remove the itemId
+        displayAddedItemsList(manager);
 
         (async () => {
           await update_record(
@@ -594,7 +594,7 @@ function update_record(record) {
             "data": addedItems
             }
           )
-          console.log(`\n tried updating these items to db: ${addedItems}`);
+          // console.log(`\n tried updating these items to db: ${addedItems}`);
         })();
         
     }
@@ -622,7 +622,7 @@ function update_record(record) {
 
         thing = await temp.json();
 
-        displayFilteredList(thing.data);
+        displayFilteredList("Emma", thing.data);
         
     })();
 
