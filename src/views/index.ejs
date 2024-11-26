@@ -205,10 +205,14 @@ input[type="text"] {
         <p>v0.1</p>      
 	<!-- <div class="container jumboContainer"> -->
 
+<!-- WARNING: the manager names below need to match the manager names that the database is instantiated with below -->
     <%
-    manager = "Emma"
+    managers = ["Emma", "David"];
+    managers.map(manager=>{
+      %>
+      
 
-    %>
+
     <div class="main-container">
 
       <div class="left-section">
@@ -226,6 +230,12 @@ input[type="text"] {
       </div>
 
     </div> 
+  
+  <%
+  })
+  %>
+
+
 
   
   <!-- </div> -->
@@ -255,6 +265,7 @@ input[type="text"] {
   //   }
   // ]
 
+// WARNING: the manager names below need to match the manager names that html is created with above
 manager_data = [
   {
     "single_id": 0,
@@ -425,10 +436,29 @@ function update_record(record) {
   res = await get_record(0);
   addedItems = res.data;
 
-  displayAddedItemsList("Emma");    
-  // for (const manager in addedItems) {
-  //   displayAddedItemsList(manager);    
-  // }
+  // displayAddedItemsList("Emma");    
+  // console.log("\n for (const manager in addedItems) ...");
+  for (const manager in addedItems) {
+    displayAddedItemsList(manager);    
+    // console.log(manager);
+  }
+
+
+  // Initial display of the full list
+  temp = await fetch('/filter', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({data: ""})
+  })
+
+  thing = await temp.json();
+
+  // displayFilteredList("Emma", thing.data);
+  for (const manager in addedItems) {
+    displayFilteredList(manager, thing.data);
+  }
 
 
 
@@ -605,35 +635,6 @@ function update_record(record) {
         
     }
   }
-
-  // Initial display of the full list
-  //   fetch('/filter', {
-  //     method: 'POST',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     body: ""
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => displayFilteredList(data))
-
-    (async () => {
-        temp = await fetch('/filter', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({data: ""})
-        })
-
-        thing = await temp.json();
-
-        displayFilteredList("Emma", thing.data);
-        
-    })();
-
-    
-  
 
   
   
