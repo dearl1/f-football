@@ -643,9 +643,19 @@ function filterList(manager) {
   }
 
 // Function to reset a manager's team's players
-
 function reset(manager) {
-  alert(`You are wanting to reset ${manager}'s players`);
+  alert(`Will reset ${manager}'s players.\nNote that the default team might not be correct if a manager has made recent transfers.`);
+  addedItems[manager] = manager_data[0]["data"][manager];
+  displayAddedItemsList(manager);
+
+  (async () => {
+    await update_record(
+      {
+      "single_id": 0,
+      "data": addedItems
+      }
+    )
+  })();
 }
   
 </script>
