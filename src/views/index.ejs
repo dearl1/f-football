@@ -25,6 +25,7 @@
 
 
 .main-container {
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -68,18 +69,28 @@
     text-align: left;
 }
 .add-remove-button {
-    flex: 1;
+    flex: 0.5;
     margin-left: 10px;
+    padding: 0px;
+    background-color: #ccc;
+    border-radius: 5px;
+}
+.reset-button {
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #ccc;
+    border-radius: 5px;
 }
 .points-container {
     flex: 1;
-    text-align: right;
+    text-align: center;
 }
 
 input[type="text"] {
     padding: 7px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin: 5px;
 }
 
 .image-section {
@@ -217,7 +228,8 @@ input[type="text"] {
 
       <div class="left-section">
         <div class="added-list">
-          <h3>Added Items</h3>
+          <h3><%=manager%></h3>
+          <button class="reset-button" type="button" onclick="reset('<%=manager%>')">Reset to default team</button>
           <ul id="addedItemsList-<%=manager%>" class="item-list"></ul>
         </div>
       </div>
@@ -569,14 +581,7 @@ function update_record(record) {
   }
 
   // Function to filter the list based on the search input
-//   function filterList() {
-//       const searchValue = document.getElementById('searchBar').value.toLowerCase();
-//       const filteredItems = fruits.filter(player => 
-//           `${player.first_name} ${player.last_name}`.toLowerCase().includes(searchValue)
-//       );
-//       displayFilteredList(filteredItems);
-//   }
-  function filterList(manager) {
+function filterList(manager) {
       const searchValue = document.getElementById(`searchBar-${manager}`).value.toLowerCase();
 
       (async () => {
@@ -636,7 +641,11 @@ function update_record(record) {
     }
   }
 
-  
+// Function to reset a manager's team's players
+
+function reset(manager) {
+  alert(`You are wanting to reset ${manager}'s players`);
+}
   
 </script>
 
