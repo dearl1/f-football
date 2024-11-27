@@ -236,7 +236,7 @@ input[type="text"] {
     
       <div class="right-section">
         <div class="container">
-          <input type="text" id="searchBar-<%=manager%>" style="color: black" placeholder="Search..." oninput="filterList(`${<%=manager%>}`)">
+          <input type="text" id="searchBar-<%=manager%>" style="color: black" placeholder="Search..." oninput="filterList('<%=manager%>')">
         </div>
         <ul id="filteredList-<%=manager%>" class="item-list filteredList"></ul>
       </div>
@@ -582,6 +582,7 @@ function update_record(record) {
 
   // Function to filter the list based on the search input
 function filterList(manager) {
+  console.log(`In function filterList. manager = ${manager}`);
       const searchValue = document.getElementById(`searchBar-${manager}`).value.toLowerCase();
 
       (async () => {
