@@ -296,6 +296,43 @@ manager_data = [
   }
 ]
 
+function squad_id_to_name(squad_id) {
+  dict = {
+    43: "Man City",
+    14: "Liverpool",
+    7: "Aston Villa",
+    3: "Arsenal",
+    8: "Chelsea",
+    4: "Newcastle",
+    36: "Brighton",
+    17: "Nottm Forest",
+    54: "Fulham",
+    6: "Tottenham",
+    1: "Man United",
+    94: "Brentford",
+    91: "Bournemouth",
+    21: "West Ham",
+    13: "Leicester City",
+    31: "Crystal Palace",
+    40: "Ipswich Town",
+    20: "Southampton",
+    11: "Everton",
+    39: "Wolves"
+  }
+
+  if (!(squad_id in dict)) {
+    return "TEAM-NAME-NOT-FOUND"
+  }
+  
+  return dict[squad_id]
+}
+
+
+
+
+
+
+
   let db = null;
   dbNeedsCreating = false;
 
@@ -487,25 +524,11 @@ function update_record(record) {
     const filteredList = document.getElementById(`filteredList-${manager}`);
     filteredList.innerHTML = ""; // Clear the existing list
     items.forEach(item => {
-        // const li = document.createElement('li');
-        // li.textContent = item.first_name + " " + item.last_name + ", " + item.squad_id + ", " + item.stats.total_points;
-
-        // const addButton = document.createElement('button');
-        // addButton.textContent = "Add";
-        // addButton.onclick = () => addItem(item.id);
-
-        // li.appendChild(addButton);
-        // filteredList.appendChild(li);
-
-
-
-
-        // start of better way
         const li = document.createElement('li');
 
         // Create a container for the name
         const nameContainer = document.createElement('div');
-        nameContainer.textContent = `${item.first_name} ${item.last_name}, ${item.squad_id}`;
+        nameContainer.textContent = `${item.first_name} ${item.last_name}   |   ${squad_id_to_name(item.squad_id)}`;
         nameContainer.className = "name-container";
 
         // Create a container for the total points
@@ -552,7 +575,7 @@ function update_record(record) {
 
           // Create a container for the name
           const nameContainer = document.createElement('div');
-          nameContainer.textContent = `${item.first_name} ${item.last_name}, ${item.squad_id}`;
+          nameContainer.textContent = `${item.first_name} ${item.last_name}   |   ${squad_id_to_name(item.squad_id)}`;
           nameContainer.className = "name-container";
 
           // Create a container for the total points
