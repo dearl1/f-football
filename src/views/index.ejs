@@ -216,6 +216,20 @@ input[type="text"] {
         <p>v0.1</p>      
 	<!-- <div class="container jumboContainer"> -->
 
+    <div class="main-container">
+
+      <div class="left-section">
+        <div class="teams-list">
+          <h2>Teams list</h3>
+          <ul id="teamsList" class="item-list"></ul>
+        </div>
+      </div>
+    
+      <div class="right-section">
+      </div>
+
+    </div> 
+
 <!-- WARNING: the manager names below need to match the manager names that the database is instantiated with below -->
     <%
     managers = ["David", "Caleb", "Ben", "Benjie & Luka", "Martin", "Ruth", "Josh", "Mark", "Paul", "Emma", "Matt", "Danny"];
@@ -655,6 +669,10 @@ function update_record(record) {
     displayFilteredList(manager, thing.data);
   }
 
+  
+  displayTeamsList();
+
+
 
 
 })();
@@ -748,6 +766,74 @@ function update_record(record) {
 
       });
   }
+
+
+
+// display teams list
+async function displayTeamsList() {
+  const manager_points = [];
+
+  for (const manager in addedItems) {
+    // console.log(`manager = ${manager}`);
+    let curPoints = 0;
+
+    const playerPromises = addedItems[manager].map(playerId => {
+      // console.log(`playerId = ${playerId}`);
+      return fetch('/filter-id', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: playerId }),
+      })
+        .then(response => response.json())
+        .then(thing => {
+          let item = thing.data[0];
+          curPoints += item.stats.total_points; // Accumulate points
+        });
+    });
+
+    // Wait for all player fetches for this manager to complete
+    await Promise.all(playerPromises);
+
+    // After all player fetches are done, add the manager's total points
+    manager_points.push([manager, curPoints]);
+  }
+
+  // console.log(`\nmanager_points...`);
+  // for (const item of manager_points) {
+  //   console.log(item);
+  // }
+
+  manager_points.sort((a, b) => b[1] - a[1]);
+
+  const teamsList = document.getElementById("teamsList");
+  teamsList.innerHTML = ""; // Clear the existing list
+  
+
+  for (const item of manager_points) {
+    const li = document.createElement('li');
+    // Create a container for the manager
+    const nameContainer = document.createElement('div');
+    nameContainer.textContent = item[0];
+    // nameContainer.className = "name-container";
+
+    // Create a container for the total points
+    const pointsContainer = document.createElement('div');
+    pointsContainer.textContent = `${item[1]} points`;
+    // pointsContainer.className = "points-container";
+
+    // Append the elements
+    li.appendChild(nameContainer);
+    li.appendChild(pointsContainer);
+    teamsList.appendChild(li);
+  }
+  
+}
+  
+  
+  
+  
 
   // Function to filter the list based on the search input
 function filterList(manager) {
