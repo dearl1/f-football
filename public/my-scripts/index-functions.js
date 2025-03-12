@@ -3,7 +3,7 @@
 
 
 // WARNING: the manager names below need to match the manager names that html is created with above
-manager_data = [
+let manager_data = [
     {
       "single_id": 0,
       "data": {
@@ -168,7 +168,7 @@ manager_data = [
   ]
   
   function squad_id_to_name(squad_id) {
-    dict = {
+    let dict = {
       43: "Man City",
       14: "Liverpool",
       7: "Aston Villa",
@@ -205,7 +205,7 @@ manager_data = [
   
   
     let db = null;
-    dbNeedsCreating = false;
+    let dbNeedsCreating = false;
   
     function open_or_create_database() {
   
@@ -337,7 +337,7 @@ manager_data = [
       }
   }
   
-  
+  let addedItems = null;
   // // end: IndexedDB functions
   window.onload = async function ()
 
@@ -354,7 +354,7 @@ manager_data = [
     // console.log(`res.player_indices = ${res.player_indices}`)
   
     // List of added items
-    res = await get_record(0);
+    let res = await get_record(0);
     addedItems = res.data;
   
     // displayAddedItemsList("Emma");    
@@ -366,7 +366,7 @@ manager_data = [
   
   
     // Initial display of the full list
-    temp = await fetch('/filter', {
+    let temp = await fetch('/filter', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
@@ -374,7 +374,7 @@ manager_data = [
         body: JSON.stringify({data: ""})
     })
   
-    thing = await temp.json();
+    let thing = await temp.json();
   
     // displayFilteredList("Emma", thing.data);
     for (const manager in addedItems) {
@@ -431,12 +431,12 @@ manager_data = [
         const addedItemsList = document.getElementById(`addedItemsList-${manager}`);
         addedItemsList.innerHTML = ""; // Clear the existing list
         console.log(`\n func displayAddedItemsList. addedItems = ${addedItems}`);
-        manager_addedItems = addedItems[manager];
+        let manager_addedItems = addedItems[manager];
         manager_addedItems.forEach(itemId => {
   
         // (async () => {
           // temp = await fetch('/filter-id', {
-          temp = fetch('/filter-id', {
+          let temp = fetch('/filter-id', {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json'
@@ -480,7 +480,7 @@ manager_data = [
     }
   
   
-  function sumPointsOfPlayers(playersDataPerManager) {
+export function sumPointsOfPlayers(playersDataPerManager) {
     let curPoints = 0;
     for (const playerData of playersDataPerManager) {
       curPoints += playerData.stats.total_points; // Accumulate points
@@ -643,5 +643,3 @@ manager_data = [
       )
     })();
   }
-
-module.exports = {reset, filterList};
