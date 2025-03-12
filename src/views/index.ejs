@@ -549,6 +549,7 @@ function update_record(record) {
   }
 
   
+  console.log("\n Will run function: displayTeamsList");
   displayTeamsList();
 
 
@@ -595,6 +596,8 @@ function update_record(record) {
 
   // Function to display the added items list
   function displayAddedItemsList(manager) {
+    // console.log(`\nIn function displayAddedItemsList`);
+
       const addedItemsList = document.getElementById(`addedItemsList-${manager}`);
       addedItemsList.innerHTML = ""; // Clear the existing list
       console.log(`\n func displayAddedItemsList. addedItems = ${addedItems}`);
@@ -647,14 +650,24 @@ function update_record(record) {
   }
 
 
+function sumPointsOfPlayers(playersDataPerManager) {
+  let curPoints = 0;
+  for (const playerData of playersDataPerManager) {
+    curPoints += playerData.stats.total_points; // Accumulate points
+  }
+  return curPoints;
+}
 
 // display teams list
 async function displayTeamsList() {
+  console.log(`\nIn function displayTeamsList`);
+
   const manager_points = [];
 
   for (const manager in addedItems) {
     // console.log(`manager = ${manager}`);
-    let curPoints = 0;
+    
+    let playersDataPerManager = [];
 
     const playerPromises = addedItems[manager].map(playerId => {
       // console.log(`playerId = ${playerId}`);
@@ -668,7 +681,8 @@ async function displayTeamsList() {
         .then(response => response.json())
         .then(thing => {
           let item = thing.data[0];
-          curPoints += item.stats.total_points; // Accumulate points
+          playersDataPerManager.push(item);
+          
         });
     });
 
@@ -676,13 +690,15 @@ async function displayTeamsList() {
     await Promise.all(playerPromises);
 
     // After all player fetches are done, add the manager's total points
-    manager_points.push([manager, curPoints]);
+    manager_points.push([manager, sumPointsOfPlayers(playersDataPerManager)]);
   }
 
   // console.log(`\nmanager_points...`);
   // for (const item of manager_points) {
   //   console.log(item);
   // }
+
+
 
   manager_points.sort((a, b) => b[1] - a[1]);
 
