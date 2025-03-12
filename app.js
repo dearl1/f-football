@@ -3,6 +3,9 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000
 const app = express();
+
+// const {reset, filterList} = require("./src/views/index-functions.js"); // Import functions
+
 const sessionsRouter = require('./src/routers/sessionsRouter')
 const playerService = require('./src/services/playerService');
 const deburr = require('lodash.deburr');
@@ -77,6 +80,9 @@ let jsonData = null;
 
 app.get('/',(req, res)=>{
 
+    // res.render('index', {
+    //     reset, filterList
+    // });
     res.render('index');
 })
 
