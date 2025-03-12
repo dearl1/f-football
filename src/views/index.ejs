@@ -658,6 +658,10 @@ function sumPointsOfPlayers(playersDataPerManager) {
   return curPoints;
 }
 
+function sort2DArray(arr) {
+  arr.sort((a, b) => b[1] - a[1]);
+}
+
 // display teams list
 async function displayTeamsList() {
   console.log(`\nIn function displayTeamsList`);
@@ -699,9 +703,8 @@ async function displayTeamsList() {
   // }
 
 
-
-  manager_points.sort((a, b) => b[1] - a[1]);
-
+  sort2DArray(manager_points)
+  
   const teamsList = document.getElementById("teamsList");
   teamsList.innerHTML = ""; // Clear the existing list
   
