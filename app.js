@@ -12,16 +12,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-sessions = [
-    {title: 'Session 1', description: 'this is session 1'},
-    {title: 'Session 2', description: 'this is session 2'},
-    {title: 'Session 3', description: 'this is session 3'},
-    {title: 'Session 4', description: 'this is session 4'}
-];
+// sessions = [
+//     {title: 'Session 1', description: 'this is session 1'},
+//     {title: 'Session 2', description: 'this is session 2'},
+//     {title: 'Session 3', description: 'this is session 3'},
+//     {title: 'Session 4', description: 'this is session 4'}
+// ];
 
 
-
-app.use('/sessions', sessionsRouter);
+// Don't need to use sessionsRouter
+// app.use('/sessions', sessionsRouter);
 
 function hasNonEnglishAlphanumerics(input) {
     // Matches any character outside A-Z, a-z, 0-9
@@ -77,18 +77,6 @@ let jsonData = null;
 
 app.get('/',(req, res)=>{
 
-    // let jsonData = null;
-    // (async () => {
-    //     jsonData = await playerService.getPlayers();
-    //     // console.log(jsonData);
-    //     // res.send(jsonData.data);
-    //     res.render('index', {title: 'Globomantics', data: jsonData.data});
-    // })();
-
-    // console.log("from app.js");
-
-
-    // res.render('index', {title: 'Globomantics', data: playerData});
     res.render('index');
 })
 
