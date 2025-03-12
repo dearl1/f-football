@@ -1,4 +1,4 @@
-import { sumPointsOfPlayers } from "./index-functions-a-few.js";
+import { sumPointsOfPlayers, sort2DArray } from "./index-functions-a-few.js";
 
   // // start: IndexedDB functions
 
@@ -480,10 +480,6 @@ let manager_data = [
         });
     }
   
-  function sort2DArray(arr) {
-    arr.sort((a, b) => b[1] - a[1]);
-  }
-  
   // display teams list
   async function displayTeamsList() {
     console.log(`\nIn function displayTeamsList`);
@@ -524,8 +520,13 @@ let manager_data = [
     //   console.log(item);
     // }
   
-  
+    // console.log("\n\n manager_points ...");
+    // console.log(JSON.stringify(manager_points, null, 2));
+    
     sort2DArray(manager_points)
+
+    // console.log("\n\n manager_points ...");
+    // console.log(JSON.stringify(manager_points, null, 2));
     
     const teamsList = document.getElementById("teamsList");
     teamsList.innerHTML = ""; // Clear the existing list

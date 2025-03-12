@@ -5,3 +5,7 @@ export function sumPointsOfPlayers(playersDataPerManager) {
   }
   return curPoints;
 }
+
+export function sort2DArray(arr) {
+  arr.sort((a, b) => b[1] - a[1]);
+}

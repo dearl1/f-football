@@ -1,5 +1,7 @@
 import assert from 'assert';
 
+// // test function sumPointsOfPlayers
+
 let data = [
     {
         "id": 118342,
@@ -1277,7 +1279,7 @@ let data = [
         "nationality": "England",
         "odds_first_goalscorer": []
     }
-]
+];
 
 // const {sumPointsOfPlayers} = require("../public/my-scripts/index-functions-a-few.js");
 import { sumPointsOfPlayers } from "../public/my-scripts/index-functions-a-few.js";
@@ -1286,3 +1288,113 @@ import { sumPointsOfPlayers } from "../public/my-scripts/index-functions-a-few.j
 // console.log("\n result of sumPointsOfPlayers function");
 // console.log(sumPointsOfPlayers(data))
 assert.strictEqual(sumPointsOfPlayers(data), 1104, "sumPointsOfPlayers has not worked correctly");
+
+
+// // test function sort2DArray
+import { sort2DArray } from "../public/my-scripts/index-functions-a-few.js";
+
+let beforeSort = [
+    [
+      "David",
+      1118
+    ],
+    [
+      "Caleb",
+      1104
+    ],
+    [
+      "Ben",
+      1019
+    ],
+    [
+      "Benjie & Luka",
+      941
+    ],
+    [
+      "Martin",
+      1028
+    ],
+    [
+      "Ruth",
+      963
+    ],
+    [
+      "Josh",
+      999
+    ],
+    [
+      "Mark",
+      1213
+    ],
+    [
+      "Paul",
+      1028
+    ],
+    [
+      "Emma",
+      982
+    ],
+    [
+      "Matt",
+      865
+    ],
+    [
+      "Danny",
+      772
+    ]
+  ];
+
+  let afterSortDesired = [
+    [
+      "Mark",
+      1213
+    ],
+    [
+      "David",
+      1118
+    ],
+    [
+      "Caleb",
+      1104
+    ],
+    [
+      "Martin",
+      1028
+    ],
+    [
+      "Paul",
+      1028
+    ],
+    [
+      "Ben",
+      1019
+    ],
+    [
+      "Josh",
+      999
+    ],
+    [
+      "Emma",
+      982
+    ],
+    [
+      "Ruth",
+      963
+    ],
+    [
+      "Benjie & Luka",
+      941
+    ],
+    [
+      "Matt",
+      865
+    ],
+    [
+      "Danny",
+      772
+    ]
+  ];
+
+sort2DArray(beforeSort);
+let actualResult = beforeSort;
+assert.deepStrictEqual(actualResult, afterSortDesired, "Arrays are not equal!");
