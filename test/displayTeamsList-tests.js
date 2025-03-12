@@ -1281,3 +1281,8 @@ let data = [
 
 // const {sumPointsOfPlayers} = require("../public/my-scripts/index-functions-a-few.js");
 import { sumPointsOfPlayers } from "../public/my-scripts/index-functions-a-few.js";
+
+
+// console.log("\n result of sumPointsOfPlayers function");
+// console.log(sumPointsOfPlayers(data))
+assert.strictEqual(sumPointsOfPlayers(data), 1104, "sumPointsOfPlayers has not worked correctly");
