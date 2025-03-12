@@ -1,12 +1,13 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+
+import path from 'path';
 
 const app = express();
-const playerService = require('../src/services/playerService');
-const deburr = require('lodash.deburr');
+import { playerService } from '../src/services/playerService.js';
+import deburr from 'lodash.deburr';
 app.use(express.json());
 
-const assert = require('assert');
+import assert from 'assert';
 
 
 function hasNonEnglishAlphanumerics(input) {
@@ -26,10 +27,10 @@ function anglicise(input) {
 
 let jsonData = null;
 (async () => {
-    jsonData = await playerService.getPlayers();
+    jsonData = await playerService();
     // console.log(jsonData);
     // res.send(jsonData.data);
-    playerData = jsonData.data;
+    let playerData = jsonData.data;
 
     
     // console.log("\nstart: find non-english characters")
@@ -53,7 +54,7 @@ let jsonData = null;
 
 
     // console.log("\nstart: check if duplicate id");
-    duplicateCount = 0;
+    let duplicateCount = 0;
     const mySet = new Set();
     for (const item of playerData) {
         if (mySet.has(item.id) ) {

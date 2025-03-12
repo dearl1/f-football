@@ -1,14 +1,19 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000
 const app = express();
 
 // const {reset, filterList} = require("./src/views/index-functions.js"); // Import functions
 
-const sessionsRouter = require('./src/routers/sessionsRouter')
-const playerService = require('./src/services/playerService');
-const deburr = require('lodash.deburr');
+// const sessionsRouter = require('./src/routers/sessionsRouter')
+import { playerService } from './src/services/playerService.js';
+import deburr from 'lodash.deburr';
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,8 +47,9 @@ function anglicise(input) {
 }
 
 let jsonData = null;
+let playerData = null;
 (async () => {
-    jsonData = await playerService.getPlayers();
+    jsonData = await playerService();
     // console.log(jsonData);
     // res.send(jsonData.data);
     playerData = jsonData.data;
@@ -91,7 +97,7 @@ app.post('/filter', (req,res) => {
         res.json({data: playerData})
     }
     else {
-        searchValue = req.body.data;
+        let searchValue = req.body.data;
         const filteredItems = playerData.filter(player => 
             `${anglicise(player.first_name)} ${anglicise(player.last_name)}`.toLowerCase().includes(searchValue)
         );
@@ -103,7 +109,7 @@ app.post('/filter', (req,res) => {
 })
 
 app.post('/filter-id', (req,res) => {
-    searchValue = req.body.data;
+    let searchValue = req.body.data;
 
     const filteredItems = playerData.filter(player => 
         player.id == searchValue
