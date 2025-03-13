@@ -340,7 +340,7 @@ let manager_data = [
   
   let addedItems = null;
   // // end: IndexedDB functions
-  window.onload = async function ()
+window.onload = async function ()
 
 {
     // await delete_database();
@@ -557,12 +557,12 @@ let manager_data = [
     
   
     // Function to filter the list based on the search input
-  function filterList(manager) {
+ function filterList(manager) {
     console.log(`In function filterList. manager = ${manager}`);
         const searchValue = document.getElementById(`searchBar-${manager}`).value.toLowerCase();
   
         (async () => {
-          temp = await fetch('/filter', {
+          let temp = await fetch('/filter', {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json'
@@ -570,7 +570,7 @@ let manager_data = [
               body: JSON.stringify({data: searchValue})
           })
   
-          thing = await temp.json();
+          let thing = await temp.json();
   
           displayFilteredList(manager, thing.data);
           
@@ -621,7 +621,7 @@ let manager_data = [
     }
   
   // Function to reset a manager's team's players
-  function reset(manager) {
+ function reset(manager) {
     alert(`Will reset ${manager}'s players.\nNote that the default team might not be correct if a manager has made recent transfers.`);
     addedItems[manager] = manager_data[0]["data"][manager];
     displayAddedItemsList(manager);
@@ -637,4 +637,5 @@ let manager_data = [
     })();
   }
 
-  
+window.filterList = filterList;
+window.reset = reset;
